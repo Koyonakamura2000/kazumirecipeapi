@@ -8,7 +8,7 @@ cred = credentials.Certificate("kazumirecipekey.json")
 firebase_admin.initialize_app(cred)
 
 app = Flask(__name__)
-app.route('/addRecipe', methods='POST')
+# app.route('/addRecipe', methods='POST')
 
 db = firestore.client()
 
