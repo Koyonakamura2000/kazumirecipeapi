@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import firebase_admin
 from firebase_admin import credentials, firestore, initialize_app
 
@@ -8,6 +9,8 @@ cred = credentials.Certificate("kazumirecipekey.json")
 firebase_admin.initialize_app(cred)
 
 app = Flask(__name__)
+CORS(app) # temporarily allow requests from all
+
 # app.route('/addRecipe', methods='POST')
 
 db = firestore.client()
