@@ -9,7 +9,7 @@ cred = credentials.Certificate("kazumirecipekey.json")
 firebase_admin.initialize_app(cred)
 
 app = Flask(__name__)
-CORS(app) # temporarily allow requests from all
+cors = CORS(app, origins=["https://www.kazumirecipe.com", "https://kazumirecipe.com", "http://kazumirecipe.com", "http://www.kazumirecipe.com"])
 
 # app.route('/addRecipe', methods='POST')
 
