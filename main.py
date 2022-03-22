@@ -8,7 +8,8 @@ cred = credentials.Certificate("kazumirecipekey.json")
 firebase_admin.initialize_app(cred, {'storageBucket': 'kazumirecipe.appspot.com'})
 bucket = storage.bucket()
 app = Flask(__name__)
-cors = CORS(app, origins=["https://www.kazumirecipe.com", "https://kazumirecipe.com", "http://kazumirecipe.com", "http://www.kazumirecipe.com", "http://localhost:3000/"])
+# cors = CORS(app, origins=["https://www.kazumirecipe.com", "https://kazumirecipe.com", "http://kazumirecipe.com", "http://www.kazumirecipe.com"])
+cors = CORS(app)
 db = firestore.client()
 recipe_ref = db.collection('recipes')
 
@@ -21,6 +22,18 @@ def recipes():
         recipes.append(recipe.to_dict())
 
     return jsonify(data=recipes)
+
+
+# checks if the submitted username and password belongs to admin user
+@app.route('/login', methods=['POST'])
+def login():
+    is_admin = False
+    admin_ref = db.collection('admins')
+    admin_list = list(admin_ref.get())
+    for admin in admin_list:
+        if request.form.get('username') == admin.get('username') and request.form.get('password') == admin.get('password'):
+            is_admin = True
+    return jsonify(isAdmin=is_admin)
 
 
 # form keys: name, image, directions (array), ingredients (array)
