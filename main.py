@@ -43,8 +43,8 @@ def add_recipe():
     test_mode = False
     name = request.form.get('name')
     image = request.files['image']
-    directions = request.form.getlist('directions[]')
-    ingredients = request.form.getlist('ingredients[]')
+    directions = request.form.getlist('directions')
+    ingredients = request.form.getlist('ingredients')
     image_name = image.filename
     extension = os.path.splitext(image_name)[1]
     if extension in ['.jpg', '.jpeg', '.png'] and is_new_recipe(name) and not test_mode:
