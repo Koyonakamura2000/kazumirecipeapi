@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import firebase_admin
-from firebase_admin import credentials, firestore, initialize_app, storage
+from firebase_admin import credentials, firestore, initialize_app, storage, auth
 import os.path
 
 cred = credentials.Certificate("kazumirecipekey.json")
@@ -27,13 +27,16 @@ def recipes():
 # checks if the submitted username and password belongs to admin user
 @app.route('/login', methods=['POST'])
 def login():
-    is_admin = False
     admin_ref = db.collection('admins')
     admin_list = list(admin_ref.get())
+    username = request.form.get('username')
+    password = request.form.get('password')
     for admin in admin_list:
-        if request.form.get('username') == admin.get('username') and request.form.get('password') == admin.get('password'):
-            is_admin = True
-    return jsonify(isAdmin=is_admin)
+        if username == admin.get('username') and password == admin.get('password'):
+            uid = username
+            token = auth.create_custom_token(uid)
+            return jsonify(isAdmin=True, token=token.decode('utf-8'))
+    return jsonify(isAdmin=False)
 
 
 # form keys: name, image, directions (array), ingredients (array)
